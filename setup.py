@@ -6,14 +6,14 @@ with open("README.md", "r") as readme:
 setup(
     name = "nspywrapper",
     packages = ["nspywrapper"],
-    version = "0.1.4",
+    version = "0.1.3",
     license = "Apache",
     description = "A python wrapper for the NationStates API",
     long_description = long_description,
     author = "Andrew Brown (aka SherpDaWerp)",
     author_email = "abrow425@gmail.com",
     url = "https://github.com/abrow425/nspy_wrapper",
-    download_url = "https://github.com/abrow425/nspy_wrapper/archive/v0.1.4.tar.gz",
+    download_url = "https://github.com/abrow425/nspy_wrapper/archive/v0.1.3.tar.gz",
     keywords = ["NATIONSTATES", "NS", "API", "WRAPPER"],
     classifiers = [
         "Development Status :: 3 - Alpha",
