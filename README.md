@@ -2,7 +2,7 @@
 A Python wrapper for the NationStates API.
 
 ## Overview
-nspy_wrapper (pronounced "*n-spy wrapper*") is an open source library allowing Python applications to access the NationStates API with minimal effort.
+nspy_wrapper (pronounced "*n-spy wrapper*", installed as ``nspy``) is an open source library allowing Python applications to access the NationStates API with minimal effort.
 nspy_wrapper has the following features:
 * a fully functional interface for the NationStates API v11 including the Nation, Region, World, World Assembly, Telegrams, Trading Cards and Verification APIs
 * automatic rate-limiting to avoid losing access, including longer ratelimits for the Telegrams API
@@ -10,9 +10,9 @@ nspy_wrapper has the following features:
 
 ## Usage
 nspy_wrapper is installable via pip, using the following command:
-```pip install nspy_wrapper```
+``pip install nspy_wrapper``
 
-Once it's installed, it can then be included in any program like any other library. (```import nspy_wrapper```; ```from nspy_wrapper import *```) 
+Once it's installed, it can then be included in any program like any other library. (``import nspy_wrapper``; ``from nspy_wrapper import *``) 
 
 ### Components
 nspy_wrapper includes the following component classes:
