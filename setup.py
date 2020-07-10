@@ -13,7 +13,7 @@ setup(
     author = "Andrew Brown (aka SherpDaWerp)",
     author_email = "abrow425@gmail.com",
     url = "https://github.com/abrow425/nspy_wrapper",
-    download_url = "https://github.com/abrow425/nspy_wrapper/archive/v_0.1.2.tar.gz",
+    download_url = "https://github.com/abrow425/nspy_wrapper/archive/v_0.1.3.tar.gz",
     keywords = ["NATIONSTATES", "NS", "API", "WRAPPER"],
     classifiers = [
         "Development Status :: 3 - Alpha",
