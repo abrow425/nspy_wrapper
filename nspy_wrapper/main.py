@@ -1,5 +1,6 @@
 __author__ = "SherpDaWerp (Andrew Brown)"
 __version__ = "0.1"
+API_VERSION = "11"
 
 from .nspy_wrapper_parser import *
 
@@ -56,6 +57,8 @@ class nsRequests:
         :param delay: the delay before making the request
         :return: the response of the request
         """
+        url += "&v="+API_VERSION
+        
         millis = int(round(time() * 1000))
         # read the current time in milliseconds
 
