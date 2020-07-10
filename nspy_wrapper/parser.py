@@ -50,16 +50,16 @@ class nsParser:
             else:
                 tags = [child.tag for child in etree]
                 duplicates = [dupe for dupe in tags if tags.count(dupe) > 1]
-                list_of_children = list(APIParser.etree_to_dict(child) for child in etree)
+                list_of_children = list(nsParser.etree_to_dict(child) for child in etree)
 
                 if duplicates:
                     if tags == duplicates:
                         final_dict = {etree.tag: list_of_children}
                     else:
                         list_of_not_dupes = list(
-                            APIParser.etree_to_dict(single) for single in etree if single.tag not in duplicates)
+                            nsParser.etree_to_dict(single) for single in etree if single.tag not in duplicates)
                         list_of_just_dupes = list(
-                            APIParser.etree_to_dict(dupe) for dupe in etree if dupe.tag in duplicates)
+                            nsParser.etree_to_dict(dupe) for dupe in etree if dupe.tag in duplicates)
                         dupe_list_tag = duplicates[0]
 
                         output = {}
@@ -83,7 +83,7 @@ class nsParser:
 
     @staticmethod
     def data_to_dict(data):
-        etree = APIParser.data_to_etree(data)
-        dictionary = APIParser.etree_to_dict(etree)
+        etree = nsParser.data_to_etree(data)
+        dictionary = nsParser.etree_to_dict(etree)
 
         return dictionary
