@@ -3,7 +3,7 @@ from xml.etree.ElementTree import fromstring, Element, XMLParser
 from warnings import warn
 
 
-class APIParser:
+class nsParser:
     @staticmethod
     def data_to_etree(data):
         """ Takes a returned "data" object from the NationStates API and parses it into an XML ElementTree.
