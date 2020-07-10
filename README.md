@@ -14,14 +14,14 @@ nspy_wrapper is installable via pip, using the following command:
 
 Once it's installed, it can then be included in any program like any other library. (```import nspy_wrapper```; ```from nspy_wrapper import *```) 
 
-#### Components
+### Components
 nspy_wrapper includes the following component classes:
-##### nsRequests
+#### nsRequests
 nsRequests is the main component, handling all ratelimiting, requesting and interfacing. It will import nsParser and all necessary exceptions.
-##### nsParser
+#### nsParser
 nsParser is a fully functional XML parsing system designed to work with data returned from the NS API. While nsParser does not require an API version to be provided, it may encounter errors in parsing data from an unsupported API version.
 
-#### Examples
+### Examples
 For example usage, look at my other NS repositories and projects, all of which are written using nspy_wrapper.
 
 ## License
