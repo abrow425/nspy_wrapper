@@ -10,9 +10,9 @@ nspy_wrapper has the following features:
 
 ## Usage
 nspy_wrapper is installable via pip, using the following command:
-``pip install nspy_wrapper``
+``pip install nspy``
 
-Once it's installed, it can then be included in any program like any other library. (``import nspy_wrapper``; ``from nspy_wrapper import *``) 
+Once it's installed, it can then be included in any program like any other library. (``import nspy``; ``from nspy import *``) 
 
 ### Components
 nspy_wrapper includes the following component classes:
