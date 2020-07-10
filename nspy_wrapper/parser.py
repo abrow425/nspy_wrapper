@@ -25,8 +25,6 @@ class nsParser:
     def etree_to_dict(etree):
         """ Takes an ElementTree object from the NationStates API and crudely parses it into a dict
 
-        Niche case: when requesting the Issues shard, there are duplicate Options and nothing else.
-
         :param etree: a parsed ElementTree.Element from the NS API. See function data_to_etree.
         :return: <dict> a dict/list structure containing the data in a more readable format.
         """
