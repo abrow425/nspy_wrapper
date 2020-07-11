@@ -16,7 +16,6 @@
 
 from .exceptions import *
 from xml.etree.ElementTree import fromstring, Element, XMLParser
-from warnings import warn
 
 
 class nsParser:
@@ -31,8 +30,7 @@ class nsParser:
             decoded_data = data.decode("utf-8")
             prep_data = str(decoded_data).replace('\n', "")
         except IndexError:
-            warn("Unable to strip non-XML characters from returned data", MalformedXML)
-            return data
+            raise MalformedXML("Unable to decode and/or strip newlines from file.", data=data)
 
         resp_data = fromstring(prep_data, XMLParser(encoding="utf-8"))
         return resp_data

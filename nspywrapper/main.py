@@ -16,7 +16,6 @@
 
 from .parser import *
 
-from warnings import warn
 from xml.parsers.expat import ExpatError
 from urllib3 import ProxyManager, PoolManager, make_headers
 from time import time, sleep
@@ -36,7 +35,7 @@ class nsRequests:
         self.apiRecruitDelay = 180000 + delay
         self.lastRequestTime = 0
 
-        self._auth = ["", "", ""]
+        self._auth = ("", "", "")
         # Default authentication array. auth[0] is the password, auth[1] is the X-Autologin and auth[2] is the X-Pin
 
         if (proxy_user is not None) & (proxy_pass is not None) & (proxy_ip is not None) & (proxy_port is not None):
@@ -60,8 +59,6 @@ class nsRequests:
 
             self._auth = newAuth
         except KeyError:
-            warn("Unable to find X-Pin and/or X-Autologin", MissingHeaders)
-
             self._auth = self._auth
 
     def make_request(self, url: str, headers: dict, delay: int = 600):
@@ -112,21 +109,11 @@ class nsRequests:
                 self.auth_set(resp_header)
                 return response
             except ExpatError:
-                warn("Malformed XML returned accessing page "+url, MalformedXML)
-
-                resp_data = response.data
-                response = (resp_header, resp_data)
-
                 self.auth_set(resp_header)
-                return response
+                raise MalformedXML("Malformed XML returned when accessing page.", data=response, url=url)
         else:
-            warn("Unsuccessful API Request: Error "+response.status, FailedRequest)
-
-            resp_data = response.data
-            response = (resp_header, resp_data)
-
             self.auth_set(resp_header)
-            return response
+            raise FailedRequest("Unsuccessful API Request.", url=url, data=response, statuscode=response.status)
 
     def world(self, shards: str or list, parameters: dict = None):
         """ Makes a request to the NationStates API of a World shard

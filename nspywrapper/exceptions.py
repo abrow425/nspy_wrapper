@@ -15,17 +15,18 @@
 """
 
 
-class APIFailure(Warning):
-    pass
+class MalformedXML(Exception):
+    def __init__(self, message, data=None, url=None):
+        super().__init__(message)
+
+        self.data = data
+        self.url = url
 
 
-class MalformedXML(APIFailure):
-    pass
+class FailedRequest(Exception):
+    def __init__(self, message, data=None, url=None, statuscode=None):
+        super().__init__(message)
 
-
-class MissingHeaders(APIFailure):
-    pass
-
-
-class FailedRequest(APIFailure):
-    pass
+        self.data = data
+        self.url = url
+        self.statuscode = statuscode
