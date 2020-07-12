@@ -16,7 +16,7 @@ Once it's installed, it can then be included in any program like any other libra
 ### Components
 nspy_wrapper includes the following component classes:
 #### nsRequests
-nsRequests is the main component, handling all ratelimiting, requesting and interfacing. nsRequests automatically includes nsParser in it's import in order to return
+nsRequests is the main component, handling all ratelimiting, requesting and interfacing. nsRequests automatically includes nsParser when imported in order to return easily-readable data.
 #### nsParser
 nsParser is a fully functional XML parsing system designed to work with data returned from the NS API. While nsParser does not require a specific API version to run, it may encounter errors in parsing data from an unsupported API version.
 
