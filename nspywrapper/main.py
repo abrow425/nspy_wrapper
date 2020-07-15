@@ -34,8 +34,6 @@ class nsRequests:
         self.apiTGDelay = 30000 + delay
         self.apiRecruitDelay = 180000 + delay
         self.lastRequestTime = 0
-
-        self._auth = ("", "", "")
         # Default authentication array. auth[0] is the password, auth[1] is the X-Autologin and auth[2] is the X-Pin
 
         if (proxy_user is not None) & (proxy_pass is not None) & (proxy_ip is not None) & (proxy_port is not None):
@@ -44,24 +42,7 @@ class nsRequests:
         else:
             self.request_manager = PoolManager()
 
-    def auth_set(self, header):
-        """ Adds the X-Autologin and the X-Pin to self.auth
-
-        :param header: the header of the request
-        :return None
-        """
-
-        try:
-            xautologin = header["X-autologin"]
-            xpin = header["X-pin"]
-
-            newAuth = [self._auth[0], xautologin, xpin]
-
-            self._auth = newAuth
-        except KeyError:
-            self._auth = self._auth
-
-    def make_request(self, url: str, headers: dict, delay: int = 600):
+    def make_request(self, url: str, headers: dict, delay: int = None):
         """ makes the request to the API
 
         :param url: the url to make the request to
@@ -69,6 +50,9 @@ class nsRequests:
         :param delay: the delay before making the request
         :return: the response of the request
         """
+        if delay is None:
+            delay = self.apiNormalDelay
+
         url += "&v="+API_VERSION
         
         millis = int(round(time() * 1000))
@@ -90,30 +74,6 @@ class nsRequests:
             self.lastRequestTime = millis + delay
 
         return response
-
-    def interpret(self, response, url):
-        """ interprets the API Data as xml and headers
-
-        :param response: the data to be interpreted
-        :param url: the url of the page being accessed (used for error logging)
-        :return: the content and headers from the response
-        """
-        resp_header = response.headers
-
-        if response.status == 200:
-            try:
-                resp_dict = nsParser.data_to_dict(response.data)
-
-                response = (resp_header, resp_dict)
-
-                self.auth_set(resp_header)
-                return response
-            except ExpatError:
-                self.auth_set(resp_header)
-                raise MalformedXML("Malformed XML returned when accessing page.", data=response, url=url)
-        else:
-            self.auth_set(resp_header)
-            raise FailedRequest("Unsuccessful API Request.", url=url, data=response, statuscode=response.status)
 
     def world(self, shards: str or list, parameters: dict = None):
         """ Makes a request to the NationStates API of a World shard
@@ -148,10 +108,8 @@ class nsRequests:
                 url += param + ";"
             url = url[:-1]
 
-        data = self.make_request(url, headers, self.apiNormalDelay)
-
-        response = self.interpret(data, url)
-        return response
+        data = self.make_request(url, headers)
+        return nsResponse(data, url)
 
     def nation(self, nation: str, shards: str or list = None, parameters: dict = None, auth: tuple = ("", "", "")):
         """ Makes a request to the NationStates API of a Nation shard
@@ -169,12 +127,7 @@ class nsRequests:
         nation_url = nation.replace(" ", "_")
         url += nation_url+"&"
 
-        if (self._auth[0] == auth[0]) and (auth[0] != ""):
-            headers = {'User-Agent': self.userAgent,
-                       'X-Password': self._auth[0],
-                       'X-Autologin': self._auth[1],
-                       'X-Pin': self._auth[2]}
-        elif auth[0] != "":
+        if auth[0] != "":
             headers = {'User-Agent': self.userAgent,
                        'X-Password': auth[0],
                        'X-Autologin': auth[1],
@@ -203,10 +156,8 @@ class nsRequests:
                 url += param + ";"
             url = url[:-1]
 
-        data = self.make_request(url, headers, self.apiNormalDelay)
-
-        response = self.interpret(data, url)
-        return response
+        data = self.make_request(url, headers)
+        return nsResponse(data, url)
 
     def telegram(self, client: str, tgid: str, key: str, recipient: str, recruitment: bool = False):
         """ Makes a request to the NationStates API to send a Telegram
@@ -232,7 +183,7 @@ class nsRequests:
         else:
             data = self.make_request(url, headers, self.apiTGDelay)
 
-        response = self.interpret(data, url)
+        response = nsResponse(data, url)
         return response
 
     def command(self, nation: str, command: str, parameters: dict, auth: tuple = ("", "", "")):
@@ -248,12 +199,7 @@ class nsRequests:
         nation_url = nation.replace(" ", "_")
         url = "https://www.nationstates.net/cgi-bin/api.cgi?nation=" + nation_url
 
-        if (self._auth[0] == auth[0]) and (auth[0] != ""):
-            headers = {'User-Agent': self.userAgent,
-                       'X-Password': self._auth[0],
-                       'X-Autologin': self._auth[1],
-                       'X-Pin': self._auth[2]}
-        elif auth[0] != "":
+        if auth[0] != "":
             headers = {'User-Agent': self.userAgent,
                        'X-Password': auth[0],
                        'X-Autologin': auth[1],
@@ -271,10 +217,8 @@ class nsRequests:
                 url += param + "&"
             url = url[:-1]
 
-        data = self.make_request(url, headers, self.apiNormalDelay)
-
-        response = self.interpret(data, url)
-        return response
+        data = self.make_request(url, headers)
+        return nsResponse(data, url)
 
     def region(self, region: str, shards: str or list = None, parameters: dict = None):
         """ Makes a request to the NationStates API of a Region shard
@@ -311,10 +255,8 @@ class nsRequests:
                 url += param + ";"
             url = url[:-1]
 
-        data = self.make_request(url, headers, self.apiNormalDelay)
-
-        response = self.interpret(data, url)
-        return response
+        data = self.make_request(url, headers)
+        return nsResponse(data, url)
 
     def world_assembly(self, council: int = 1, shards: str or list = None, parameters: dict = None):
         """ Makes a request to the NationStates API of a World shard
@@ -350,10 +292,8 @@ class nsRequests:
                 url += param + ";"
             url = url[:-1]
 
-        data = self.make_request(url, headers, self.apiNormalDelay)
-
-        response = self.interpret(data, url)
-        return response
+        data = self.make_request(url, headers)
+        return nsResponse(data, url)
 
     def verify(self, nation: str, checksum: str, token: str or list = ""):
         """ Makes an authentication request to the NS API with the given token.
@@ -374,7 +314,37 @@ class nsRequests:
         if token != "":
             url += "&token="+token
 
-        data = self.make_request(url, headers, self.apiNormalDelay)
+        data = self.make_request(url, headers)
+        return nsResponse(data, url)
 
-        response = self.interpret(data, url)
-        return response
+
+class nsResponse:
+    def __init__(self, response, url):
+        self.original_response = response
+
+        self.status = response.status
+        self.headers = response.headers
+
+        self._url = url
+
+        if response.status == 200:
+            try:
+                self.data = nsParser.data_to_dict(response.data)
+            except ExpatError:
+                raise MalformedXML("Malformed XML returned when accessing page.", data=response, url=url)
+        else:
+            self.data = response.data
+
+    def request_url(self):
+        return self._url
+
+    def get_auth(self):
+        try:
+            xautologin = self.headers["X-autologin"]
+            xpin = self.headers["X-pin"]
+
+            returned_auth = [xautologin, xpin]
+
+            return returned_auth
+        except KeyError:
+            raise MissingHeaders("X-Autologin or X-Pin unavailable in API request headers.")

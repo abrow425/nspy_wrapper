@@ -23,10 +23,15 @@ class MalformedXML(Exception):
         self.url = url
 
 
+class MissingHeaders(Exception):
+    def __init__(self, message):
+        super().__init__(message)
+
+
 class FailedRequest(Exception):
-    def __init__(self, message, data=None, url=None, statuscode=None):
+    def __init__(self, message, data=None, url=None, status_code=None):
         super().__init__(message)
 
         self.data = data
         self.url = url
-        self.statuscode = statuscode
+        self.status_code = status_code
