@@ -19,4 +19,7 @@ setup(
         "License :: OSI Approved :: Apache Software License",
         "Programming Language :: Python :: 3.8",
     ],
+    install_requires=[
+        "urllib3",
+    ],
 )
